@@ -72,23 +72,23 @@ order by department
 end
 go
 
- -----Output parameter------
+-------Output parameter--------
 
---alter proc VariableProc 
---@name varchar(100),
---@city varchar(100),
---@Result varchar(100) output
---as
---begin 
---set @Result=@name + ' ' + @city
---end
+alter proc VariableProc 
+@name varchar(100),
+@city varchar(100),
+@Result varchar(100) output
+as
+begin 
+set @Result=@name + ' ' + @city
+end
 
---declare @Name varchar(100)
---exec  VariableProc 'Karan','Pune',@Name output;
---select @Name as 'Employee with city';
+declare @Name varchar(100)
+exec  VariableProc 'Karan','Pune',@Name output;
+select @Name as 'Employee with city';
+go
 
-
------Variable--------
+--------Variable------------
 
 alter proc variable(
 @employee_id int
@@ -104,4 +104,3 @@ print @employee_name
 print @city
 end
 go
- 
