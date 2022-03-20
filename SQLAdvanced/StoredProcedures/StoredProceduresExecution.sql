@@ -6,7 +6,7 @@ exec MaleEmployees;
 
 exec FemaleEmployees;
 
-exec ParameterProcedure 5,'Surat'
+exec ParameterProcedure 4,'Surat'
 
 exec ParameterProcedure1 @department='Sales', @name='Karan'
 

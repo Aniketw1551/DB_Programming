@@ -1,5 +1,6 @@
 -------Handling Expressions------
 
+
 ----------Try catch -------------
 
 CREATE PROC Divide(
@@ -52,6 +53,7 @@ CREATE TABLE sales_deals
     FOREIGN KEY(person_id) REFERENCES sales_persons(
     person_id)
 );
+
 insert into 
     sales_deals(person_id, deal_note)
 values
@@ -60,6 +62,7 @@ values
 select * from sales_persons
 select * from sales_deals
 go
+
 
 CREATE PROC report_error
 AS
@@ -71,6 +74,7 @@ AS
         ,ERROR_PROCEDURE() AS ErrorProcedure  
         ,ERROR_MESSAGE() AS ErrorMessage;  
 GO
+
 
 CREATE PROC delete_person(
     @person_id INT
@@ -109,7 +113,6 @@ GO
 
 EXEC delete_person 1;
 go
-
 
 -------- Raiseerror with try catch -----
 
@@ -169,6 +172,6 @@ EXEC sys.sp_addmessage
 GO
 
 DECLARE @MessageText NVARCHAR(2048);
-SET @MessageText =  FORMATMESSAGE(50010, N'400');   
+SET @MessageText =  FORMATMESSAGE(50010, N'500');   
 
-THROW 50010, @MessageText, 1; 
+THROW 50010, @MessageText, 1;
