@@ -73,71 +73,74 @@ go
 
 ----------------Instead of insert trigger------------
 
-create table Products(
-product_id int identity (1,1) primary key,
-product_name varchar(100),
-cost int
+create table Employee_new(
+id int primary key,
+name varchar(100),
+gender varchar(2),
+department_id int
 );
 
-create table Sales(
-sale_id int identity (1,1) primary key,
-product_id int,
-sale_price int
+
+create table Department_new(
+department_id int primary key,
+department_name varchar (100)
 );
 
-insert into Products values('Mobile',10000)
-insert into Products values('Laptop',25000)
-insert into Products values('Camera',27000)
+insert into Employee_new values(1,'Sanket','M',3)
+insert into Employee_new values(2,'Sahil','M',2)
+insert into Employee_new values(3,'Sana','F',1)
+insert into Employee_new values(4,'Reema','F',4)
+insert into Employee_new values(5,'Aarti','F',1)
 
-insert into Sales values(1,12000)
-insert into Sales values(2,30000)
-insert into Sales values(1,15000)
-insert into Sales values(3,30000)
+insert into Department_new values(1,'IT')
+insert into Department_new values(2,'HR')
+insert into Department_new values(3,'Manager')
+insert into Department_new values(4,'Admin')
 
-drop table Sales
-select * from Products
-select * from Sales
+
+select * from Employee_new
+select * from Department_new
 go
 
---drop table EmployeeCity
---drop view Employee_Detail
 
-create view Product_Detail
+create view vsEmployee_Detail
 as
 select 
-a.product_id,a.product_name,a.cost,c.sale_price
-from Products a inner join Sales c on a.product_id=c.product_id
+a.id,a.name,a.gender,b.department_name
+from Employee_new a inner join Department_new b on a.department_id=b.department_id
 
-select * from Product_Detail
+select * from vsEmployee_Detail
 
 go
 
-create trigger trg_InsteadInsert
-on Product_Detail
+---------------Create Instead of trigger-------------------
+
+create trigger trg_InsteadInsert_new
+on vsEmployee_Detail
 instead of insert 
 as
 begin
-declare @product_id  int 
-select product_id = @product_id  from inserted
-if exists (select top 1 * from Products where product_id = @product_id)
+declare @department_id  int 
+select @department_id = department_id  from Department_new join inserted on inserted.department_name = Department_new.department_name
+
+if(@department_id is null)
 begin
-insert into Sales(product_Id,sale_price)
-select a.product_id,a.sale_price from inserted a
+raiserror('Invalid department name. Statement terminated', 16, 1)
+return
 end
-else
-begin
-print 'Adequate data not provided'
- end
+
+insert into Employee_new(id,name,gender,department_id)
+select id,name,gender,@department_id
+from inserted
 end
-go
 
-drop trigger trg_InsteadInsert
 
-select * from Products
-select * from Sales
-select * from Product_Detail
+select * from Employee_new
+select * from Department_new
+select * from vsEmployee_Detail
 
-insert into Product_Detail(product_id,product_name,cost,sale_price)values(5,'aa',25000,30000)
+
+insert into vsEmployee_Detail(id,name,gender,department_name)values(6,'Akash','M','IT')
 go
 
 ---------------------DDL Triggers---------------------
